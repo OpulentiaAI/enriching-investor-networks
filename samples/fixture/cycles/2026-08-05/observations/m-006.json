@@ -1,0 +1,17 @@
+{
+  "member_id": "m-006",
+  "identity": {
+    "linkedin_url": "https://linkedin.com/in/piotr-nowak-example"
+  },
+  "observations": [
+    {
+      "field": "actively_investing",
+      "value": "false",
+      "source": "linkedin_profile",
+      "source_url": "https://linkedin.com/in/piotr-nowak-example",
+      "observed_at": "2026-08-05",
+      "confidence": "Verified",
+      "evidence": "Headline: \"COO @ Meridian Systems \u2014 building ops from zero to one\""
+    }
+  ]
+}

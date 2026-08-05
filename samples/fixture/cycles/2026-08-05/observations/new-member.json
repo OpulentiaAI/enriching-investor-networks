@@ -1,0 +1,25 @@
+{
+  "identity": {
+    "linkedin_url": "https://linkedin.com/in/beatrice-nunez-example",
+    "name": "B\u00e9atrice Nu\u00f1ez",
+    "organization": "Nunez Capital"
+  },
+  "observations": [
+    {
+      "field": "title",
+      "value": "Founding Partner",
+      "source": "linkedin_profile",
+      "source_url": "https://linkedin.com/in/beatrice-nunez-example",
+      "observed_at": "2026-08-05",
+      "confidence": "Verified"
+    },
+    {
+      "field": "organization",
+      "value": "Nunez Capital",
+      "source": "linkedin_profile",
+      "source_url": "https://linkedin.com/in/beatrice-nunez-example",
+      "observed_at": "2026-08-05",
+      "confidence": "Verified"
+    }
+  ]
+}

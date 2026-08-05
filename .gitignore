@@ -1,0 +1,31 @@
+node_modules/
+.DS_Store
+*.log
+
+# Live workspace output at the repo root — never commit member or prospect data
+/networks/
+/members.json
+/changes.jsonl
+/changes.csv
+/cycles/
+/outreach_state.json
+/writeback.json
+/invite_queue.proposed.json
+/refresh.html
+/summary.json
+
+# Generated when the offline fixture is run in place
+/samples/fixture/changes.jsonl
+/samples/fixture/changes.csv
+/samples/fixture/writeback.json
+/samples/fixture/invite_queue.proposed.json
+/samples/fixture/refresh.html
+/samples/fixture/summary.json
+/samples/fixture/cycles/*/events.jsonl
+/samples/fixture/cycles/*/quarantine.jsonl
+/samples/fixture/cycles/*/prospects/eligible.jsonl
+/samples/fixture/cycles/*/prospects/suppressed.jsonl
+
+# Real community profiles carry client schemas and member PII; only the template is tracked
+/profiles/*.json
+!/profiles/example.json

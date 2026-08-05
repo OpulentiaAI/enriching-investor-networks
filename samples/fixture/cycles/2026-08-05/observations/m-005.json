@@ -1,0 +1,17 @@
+{
+  "member_id": "m-005",
+  "identity": {
+    "linkedin_url": "https://linkedin.com/in/hana-yoshi-example"
+  },
+  "observations": [
+    {
+      "field": "organization",
+      "value": "Yoshinova Partners",
+      "source": "contextdev",
+      "source_url": "https://api.context.dev/v1/people",
+      "observed_at": "2026-08-05",
+      "confidence": "Estimated",
+      "evidence": "Company resolution matched a similarly named entity"
+    }
+  ]
+}

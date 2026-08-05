@@ -1,0 +1,11 @@
+{
+  "identity": {},
+  "observations": [
+    {
+      "field": "title",
+      "value": "Mystery",
+      "source": "web_public",
+      "observed_at": "2026-08-05"
+    }
+  ]
+}

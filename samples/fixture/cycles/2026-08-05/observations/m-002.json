@@ -1,0 +1,12 @@
+{
+  "member_id": "m-002",
+  "identity": {
+    "linkedin_url": "https://linkedin.com/in/tobias-krug-example"
+  },
+  "observations": [],
+  "email_status": {
+    "value": "bounced",
+    "checked_at": "2026-08-05",
+    "provider": "verifier"
+  }
+}

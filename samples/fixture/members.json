@@ -1,0 +1,365 @@
+{
+  "updated_at": "2026-07-15",
+  "members": [
+    {
+      "member_id": "m-001",
+      "name": "Aria Chen",
+      "linkedin_url": "https://linkedin.com/in/aria-chen-example",
+      "fields": {
+        "title": {
+          "value": "Principal",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Ashgrove Capital",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "aria@ashgrove.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "location": {
+          "value": "Boston, MA",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": "https://news.test/ashgrove-seed",
+          "observed_at": "2026-03-20",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-10",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-002",
+      "name": "Tobias Krug",
+      "linkedin_url": "https://linkedin.com/in/tobias-krug-example",
+      "fields": {
+        "title": {
+          "value": "Partner",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Krug Ventures",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "tobias@krugventures.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": "https://news.test/krug-fund-i",
+          "observed_at": "2025-06-01",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-06-01",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-003",
+      "name": "Selin Osman",
+      "linkedin_url": "https://linkedin.com/in/selin-osman-example",
+      "fields": {
+        "title": {
+          "value": "GP",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Bosphorus Angels",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "selin@bosphorus.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": "https://news.test/bosphorus-checks",
+          "observed_at": "2026-05-11",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-20",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-004",
+      "name": "Derrick Abara",
+      "linkedin_url": "https://linkedin.com/in/derrick-abara-example",
+      "fields": {
+        "title": {
+          "value": "Angel",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Independent",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "derrick@abara.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "location": {
+          "value": "Chicago, IL",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": null,
+          "observed_at": "2026-04-02",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-22",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-005",
+      "name": "Hana Yoshi",
+      "linkedin_url": "https://linkedin.com/in/hana-yoshi-example",
+      "fields": {
+        "title": {
+          "value": "Managing Partner",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Yoshi Capital",
+          "confidence": "Verified",
+          "source": "member_confirmed",
+          "source_url": null,
+          "observed_at": "2026-07-01",
+          "history": []
+        },
+        "email": {
+          "value": "hana@yoshicapital.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": null,
+          "observed_at": "2026-06-15",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-25",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-006",
+      "name": "Piotr Nowak",
+      "linkedin_url": "https://linkedin.com/in/piotr-nowak-example",
+      "fields": {
+        "title": {
+          "value": "Partner",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Vistula Early",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "piotr@vistula.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": null,
+          "observed_at": "2026-02-14",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-18",
+        "provider": "verifier"
+      }
+    },
+    {
+      "member_id": "m-007",
+      "name": "Mira Castillo",
+      "linkedin_url": "https://linkedin.com/in/mira-castillo-example",
+      "fields": {
+        "title": {
+          "value": "Investor",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Castillo Family Office",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "true",
+          "confidence": "Verified",
+          "source": "web_public",
+          "source_url": null,
+          "observed_at": "2026-06-28",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "unknown",
+        "checked_at": null,
+        "provider": null
+      }
+    },
+    {
+      "member_id": "m-008",
+      "name": "Lena Fournier",
+      "linkedin_url": null,
+      "fields": {
+        "title": {
+          "value": "Angel",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "organization": {
+          "value": "Solo",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "email": {
+          "value": "lena@fournier.test",
+          "confidence": "Verified",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        },
+        "actively_investing": {
+          "value": "Unknown",
+          "confidence": "Unknown",
+          "source": "platform_record",
+          "source_url": null,
+          "observed_at": "2026-06-12",
+          "history": []
+        }
+      },
+      "email_status": {
+        "value": "verified",
+        "checked_at": "2026-07-30",
+        "provider": "verifier"
+      }
+    }
+  ]
+}

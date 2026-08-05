@@ -1,0 +1,22 @@
+{
+  "member_id": "m-007",
+  "identity": {
+    "linkedin_url": "https://linkedin.com/in/mira-castillo-example"
+  },
+  "observations": [
+    {
+      "field": "email",
+      "value": "mira@castillo.test",
+      "source": "contextdev",
+      "source_url": "https://api.context.dev/v1/people",
+      "observed_at": "2026-08-05",
+      "confidence": "Estimated",
+      "evidence": "Pattern-inferred from org domain"
+    }
+  ],
+  "email_status": {
+    "value": "candidate",
+    "checked_at": "2026-08-05",
+    "provider": null
+  }
+}

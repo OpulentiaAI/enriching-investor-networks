@@ -1,0 +1,7 @@
+{
+  "name": "enriching-investor-networks-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic helpers for the enriching-investor-networks skill. No dependencies — Node 18+ only.",
+  "engines": { "node": ">=18" }
+}

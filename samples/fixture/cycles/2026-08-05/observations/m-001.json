@@ -1,0 +1,31 @@
+{
+  "member_id": "m-001",
+  "identity": {
+    "linkedin_url": "https://www.linkedin.com/in/aria-chen-example/"
+  },
+  "observations": [
+    {
+      "field": "title",
+      "value": "Partner",
+      "source": "linkedin_profile",
+      "source_url": "https://linkedin.com/in/aria-chen-example",
+      "observed_at": "2026-08-05",
+      "confidence": "Verified",
+      "evidence": "Headline: \"Partner @ Harborlight Ventures \u2014 early-stage fintech\""
+    },
+    {
+      "field": "organization",
+      "value": "Harborlight Ventures",
+      "source": "linkedin_profile",
+      "source_url": "https://linkedin.com/in/aria-chen-example",
+      "observed_at": "2026-08-05",
+      "confidence": "Verified",
+      "evidence": "Headline: \"Partner @ Harborlight Ventures \u2014 early-stage fintech\""
+    }
+  ],
+  "email_status": {
+    "value": "verified",
+    "checked_at": "2026-08-05",
+    "provider": "verifier"
+  }
+}
