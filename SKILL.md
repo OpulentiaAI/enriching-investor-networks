@@ -14,7 +14,7 @@ A community database rots quietly. Investors change funds without telling you, e
 
 ## Ownership
 
-This skill owns the record lifecycle: ingest, re-enrich, resolve, diff, report, and the *payloads* for writeback and invitations. It does not own the send. The community platform's existing automated emails do the inviting; the platform API does the writing; a person approves both. "Investor" throughout means a member of the community's investor network; the discovery lane recruits event attendees and sponsors.
+This skill owns the record lifecycle: ingest, re-enrich, resolve, diff, report, and the *payloads* for writeback and invitations. It does not own the send. The community platform's existing automated emails do the inviting; the platform API does the writing; a person approves both. "Investor" throughout means a member of the community's investor network. Lane two fills a named event's sponsor and attendee queues.
 
 **Output directory**: `/opulent/workspace/networks/{community_slug}/` — persistent across cycles, not per-run. Each cycle lands in `cycles/{YYYY-MM-DD}/`, canonical state lives in `members.json`, and the change history in `changes.jsonl`.
 
@@ -56,7 +56,7 @@ Reading is unattended; writing never is.
 
 ## Pipeline Overview
 
-Nine steps. Lane one is 0–6; lane two is 7–8 and can run the same cycle or independently.
+Nine steps. Lane one (0–6) refreshes the known network. Lane two (7–8) builds the queues for one selected event. They run in the same cycle or independently.
 
 0. **Setup** — workspace, cycle folder, previous-state check
 1. **Load community profile** — `profiles/{community_slug}.json`
@@ -65,10 +65,10 @@ Nine steps. Lane one is 0–6; lane two is 7–8 and can run the same cycle or i
 4. **Resolve + diff** — `diff_enrichment.mjs`: identity resolution, precedence, typed changes
 5. **Verify emails** — the required-and-current contract
 6. **Report + writeback payload** — `compile_refresh.mjs`, then the gate
-7. **Discover prospects** — sponsors and investors against the profile ICPs
-8. **Gate + hand off** — `gate_prospects.mjs` suppression → approval → invitation queue
+7. **Build event queues** — company gate first, then people at qualified companies
+8. **Gate, review, hand off** — suppression → approve/hold/reject → invitation queue
 
-Invoke with `/enriching-investor-networks [--community <slug>] [--cycle YYYY-MM-DD] [--lane refresh|grow|both] [--push]`. Defaults: `both`, today's date, dry-run. `--push` does not skip the gate; it only pre-selects the affirmative.
+Invoke with `/enriching-investor-networks [--community <slug>] [--event <slug>] [--cycle YYYY-MM-DD] [--lane refresh|events|both] [--push]`. Defaults: `both`, today's date, dry-run. Lane two needs `--event`; without one there is no audience, no capacity, and no reason to engage now. `--push` does not skip the gate; it only pre-selects the affirmative.
 
 ---
 
@@ -146,17 +146,38 @@ a blocking question {
 
 On approval: idempotent PUTs, read-after-write per record, receipts into the cycle folder. Unverified writes are reported `blocked`, not assumed.
 
-## Step 7: Discover Prospects
+## Step 7: Build the event queues
 
-Lane two. Two ICPs from the profile — `sponsor_icp` (companies that buy event sponsorships: stage-services vendors, banks, platforms serving the member base) and `investor_icp` (investors who belong in the room as community members and event attendees). Discovery mirrors the researching-companies pattern: diverse search queries, Context.dev company resolution per unique domain, one retrieval per candidate, evidence quoted. Each prospect lands in `cycles/{date}/prospects/found.jsonl` with `kind: sponsor|investor`, the ICP evidence line, and source. Caps in `references/workflow.md`.
+Lane two is scoped to **one selected event**, not to open-ended prospecting. Load the event brief from the profile's `events` block: audience and sponsor criteria, prior attendees, current RSVP state, sponsor commitments, venue capacity and status, must-invite and do-not-invite rules, and exclusions.
 
-## Step 8: Gate + Hand Off
+**Companies are qualified before any person is enriched.** That ordering is the cost lever and the quality lever at once.
+
+1. **Discover broadly** — companies that could sponsor or send attendees, from search and the community's own history. Resolve and dedupe by canonical domain.
+2. **Gate the companies** — one cheap pass per company against the event's sponsor or audience criteria, with the evidence line quoted. Companies below the threshold stop here and keep their rejection reason.
+3. **Enrich people only at companies that passed.** Current role, contact path, recent activity, and relationship history with the community.
+4. **Pick one reason to engage now.** The strongest *truthful* dated signal — a new fund, a financing, a hire, an expansion, a leadership move, prior attendance. One reason, quoted, event-scoped. Where no dated signal exists, the reason is the event fit itself, said plainly.
+
+Output is two ranked queues per event — `sponsors.jsonl` and `attendees.jsonl` under `cycles/{date}/events/{event_slug}/` — each row carrying its gate result, component scores, evidence, relationship state, and reason to engage. Rejected candidates are retained with reason codes; a funnel with no visible rejections is a funnel nobody can audit.
+
+Detail in `references/event-queues.md`.
+
+## Step 8: Gate, review, hand off
 
 ```bash
-node {SKILL_DIR}/scripts/gate_prospects.mjs "$WORKSPACE" --cycle "$CYCLE"
+node {SKILL_DIR}/scripts/gate_prospects.mjs "$WORKSPACE" --cycle "$CYCLE" --event "$EVENT_SLUG"
 ```
 
-Suppression first — against `members.json`, `exclusions`, prior outreach states — writing `eligible.jsonl` and `suppressed.jsonl` *with reasons*. Then the approval gate with the eligible list visible. Approved prospects go to `invite_queue.json` in the platform's invitation-system shape with state `queued`; the platform's existing automated emails take it from there. State transitions (`queued → invited → responded | bounced | declined`) sync back next cycle and feed future suppression.
+Mechanical suppression first — members, exclusions, prior outreach state, bounced contacts, anyone already RSVP'd or already invited to this event — writing `eligible.jsonl` and `suppressed.jsonl` *with reasons*. Must-invite entries bypass fit scoring but never bypass suppression: a do-not-contact wins over a must-invite, and the conflict is surfaced rather than resolved silently.
+
+Then the human review, which is **three-state, on both the candidate and the message**:
+
+| Verdict | Meaning | Effect |
+|---|---|---|
+| `approve` | Person and message are both good | Enters the queue |
+| `hold` | Right person, wrong time or wrong message | Stays for the next event; the reason is recorded |
+| `reject` | Wrong person for this community | Feeds suppression for future cycles |
+
+Approved rows go to `invite_queue.json` in the platform's shape; the platform's existing automation sends. **After delivery, monitoring continues** — replies, bounces, opt-outs, and suppression events sync back next cycle, feed the ladder, and update outreach memory. Accepted and rejected outcomes both sharpen the next event's gate.
 
 Close the cycle with the summary:
 
@@ -167,11 +188,15 @@ Close the cycle with the summary:
 - **Changes**: {n} ({role_change} roles · {org_change} orgs · {contact_change} contact · {investing_status_change} investing)
 - **Emails**: {verified} verified · {bounced} bounced → re-verification queue
 - **Writeback**: {pushed|dry-run} — {n} fields across {m} members
-- **Prospects**: {found} found → {eligible} eligible ({suppressed} suppressed) → {queued} queued
+- **Event queues** ({event}): {companies_gated} companies gated → {passed} passed → {people} enriched
+- **Review**: {approved} approved · {held} held · {rejected} rejected → {queued} queued
+- **Post-delivery**: {replies} replies · {bounces} bounces · {optouts} opt-outs
 - **Next cycle**: {date + cadence}
 ```
 
-Register the recurring run with a scheduled automation on the profile's cadence. The cycle is idempotent end to end — a retry after a crash re-emits nothing.
+**Scheduling is earned, not assumed.** Cycle one runs as a 25–50 record pilot. Measure identity resolution, field coverage, conflicts, false positives, accepted updates, and cost, and put those numbers in front of the owner. The recurring cadence is registered as a scheduled automation only after a pilot passes.
+
+Every run carries explicit limits — calls, credits, runtime, retries, work count — and stops on identity drift, access failures, a conflict spike, precision below the pilot's bar, or unexpected cost. A run that stops reports where it stopped and what it had completed. The cycle is idempotent end to end, so a retry after a stop re-emits nothing.
 
 ---
 

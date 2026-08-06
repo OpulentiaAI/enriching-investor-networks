@@ -13,7 +13,7 @@ One entry per member with changed fields, each field carrying its evidence:
 ```json
 {
   "member_id": "m-0412",
-  "idempotency_key": "m-0412:organization:2026-08-05",
+  "idempotency_key": "m-0412:organization:2026-08-05:v1",
   "fields": {
     "organization": {
       "value": "Harborlight Ventures",
@@ -32,7 +32,7 @@ If the platform's schema cannot carry provenance, the values still push but the 
 ### The push, after approval
 
 1. Record match first — `GET` the member by `member_id`; a missing record is `blocked: no_record_match`, never a create. This skill updates members; it does not mint them.
-2. Idempotent `PUT`/`PATCH` per member, keyed as above. A retried push with the same key must be a no-op on the platform side; if the API cannot promise that, push once and verify rather than retry.
+2. Idempotent `PUT`/`PATCH` per member, keyed `record_id:field:observed_at:application_version` as above — the version term keeps a re-run under new logic from colliding with an old write. A retried push with the same key must be a no-op on the platform side; if the API cannot promise that, push once and verify rather than retry.
 3. **Read-after-write per record.** A 200 is not proof the field took. Re-`GET`, compare, then record the receipt (`pushed_at`, response id, verified fields) in the cycle folder.
 4. Partial failure is reported per member: `pushed: 41, blocked: 2 (no_record_match), unverified: 1` — not rounded up to success.
 
@@ -47,12 +47,13 @@ The community already runs automated invitation emails for sponsors and investor
 ### States
 
 ```
-proposed → eligible → approved → queued → invited → responded | declined | bounced
-                     ↘ suppressed (with reason, terminal for the cycle)
+proposed → eligible → approved → queued → invited → responded | declined | bounced | opted_out
+                   ↘ suppressed        ↘ held (returns next event)
+                     (with reason)     ↘ rejected (feeds suppression)
 ```
 
 - `proposed → eligible` is `gate_prospects.mjs` — mechanical suppression, no judgment.
-- `eligible → approved` is a human at the a blocking question gate, with the list and evidence visible. Never auto-approved, never batched past the person.
+- `eligible → approved` is a human at the review gate, with the list and evidence visible. Approval is per candidate and per message, and it is not batched past the person.
 - `approved → queued` writes `invite_queue.json` in the platform's shape (profile `invites.queue_shape`); the platform's own automation takes it from `queued`.
 - `invited → responded/declined/bounced` syncs back next cycle from the platform and feeds suppression memory.
 

@@ -135,5 +135,29 @@
   "approval_owners": [
     "community-ops"
   ],
-  "created_at": "2026-08-05"
+  "created_at": "2026-08-05",
+  "events": {
+    "selected": "harbor-dinner-2026-09",
+    "catalog": [
+      {
+        "slug": "harbor-dinner-2026-09",
+        "name": "Harbor Dinner",
+        "date": "2026-09-24",
+        "status": "confirmed",
+        "venue_capacity": 2,
+        "audience_criteria": "Early-stage investors active in the Northeast.",
+        "sponsor_criteria": "Vendors selling to emerging managers.",
+        "must_invite": [
+          "Amaka Obi",
+          "Ingrid Solberg"
+        ],
+        "do_not_invite": [
+          "Ingrid Solberg"
+        ],
+        "conflict_exclusions": [
+          "ledgerline.test"
+        ]
+      }
+    ]
+  }
 }

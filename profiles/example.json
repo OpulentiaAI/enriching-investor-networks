@@ -2,25 +2,71 @@
   "community_slug": "example-collective",
   "community_name": "Harborlight Investor Collective",
   "member_count_expected": 1180,
-  "cadence_days": { "min": 14, "max": 28 },
+  "cadence_days": {
+    "min": 14,
+    "max": 28
+  },
   "concurrency": 3,
   "recency_months_actively_investing": 12,
   "fields": [
-    { "name": "phone", "required": false },
-    { "name": "email", "required": true, "current": true },
-    { "name": "industries", "required": false },
-    { "name": "title", "required": true },
-    { "name": "organization", "required": true },
-    { "name": "location", "required": false },
-    { "name": "linkedin_headline", "required": false },
-    { "name": "linkedin_about", "required": false },
-    { "name": "actively_investing", "required": true, "evidence_based": true },
-    { "name": "changes_since_last", "required": true, "computed": true }
+    {
+      "name": "phone",
+      "required": false
+    },
+    {
+      "name": "email",
+      "required": true,
+      "current": true
+    },
+    {
+      "name": "industries",
+      "required": false
+    },
+    {
+      "name": "title",
+      "required": true
+    },
+    {
+      "name": "organization",
+      "required": true
+    },
+    {
+      "name": "location",
+      "required": false
+    },
+    {
+      "name": "linkedin_headline",
+      "required": false
+    },
+    {
+      "name": "linkedin_about",
+      "required": false
+    },
+    {
+      "name": "actively_investing",
+      "required": true,
+      "evidence_based": true
+    },
+    {
+      "name": "changes_since_last",
+      "required": true,
+      "computed": true
+    }
   ],
   "source_policy": {
-    "ladder": ["member_confirmed", "linkedin_profile", "contextdev", "web_public", "platform_record", "inferred"],
+    "ladder": [
+      "member_confirmed",
+      "linkedin_profile",
+      "contextdev",
+      "web_public",
+      "platform_record",
+      "inferred"
+    ],
     "linkedin": "member-consented public profiles only, authenticated user session, human pace, stop on interstitial",
-    "contextdev_tags": ["client:example-collective", "app:enriching-investor-networks"]
+    "contextdev_tags": [
+      "client:example-collective",
+      "app:enriching-investor-networks"
+    ]
   },
   "email_verification": {
     "provider": "set-in-connector",
@@ -36,22 +82,40 @@
   },
   "sponsor_icp": {
     "description": "Vendors and platforms that serve early-stage investors and founders and buy event sponsorships: venture banking, fund administration, cap-table and back-office platforms, legal for emerging managers.",
-    "geographies": ["Boston", "New York", "San Francisco"],
+    "geographies": [
+      "Boston",
+      "New York",
+      "San Francisco"
+    ],
     "evidence_bar": "A quoted line showing they sell to this audience or have sponsored comparable events."
   },
   "investor_icp": {
-    "description": "Early-stage investors who fit the community's rooms as members and attendees — emerging managers, angels, and GPs active in the covered geographies.",
-    "geographies": ["Boston", "New York", "San Francisco"],
+    "description": "Early-stage investors who fit the community's rooms as members and attendees \u2014 emerging managers, angels, and GPs active in the covered geographies.",
+    "geographies": [
+      "Boston",
+      "New York",
+      "San Francisco"
+    ],
     "evidence_bar": "A quoted, dated line showing active early-stage investing inside the recency window."
   },
   "event_families": [
-    { "name": "Harbor Dinner Series", "sponsorship_usd": 4500 },
-    { "name": "Founder Forum", "sponsorship_usd": 2500 }
+    {
+      "name": "Harbor Dinner Series",
+      "sponsorship_usd": 4500
+    },
+    {
+      "name": "Founder Forum",
+      "sponsorship_usd": 2500
+    }
   ],
   "exclusions": {
-    "organizations": ["Rival Community Co"],
+    "organizations": [
+      "Rival Community Co"
+    ],
     "people": [],
-    "domains": ["rivalcommunity.test"]
+    "domains": [
+      "rivalcommunity.test"
+    ]
   },
   "outreach": {
     "decline_cooldown_days": 180,
@@ -59,8 +123,74 @@
   },
   "invites": {
     "system": "platform-automated-emails",
-    "queue_shape": { "kind": "sponsor|investor", "name": "", "email": "", "organization": "", "template_id": "", "state": "queued" }
+    "queue_shape": {
+      "kind": "sponsor|investor",
+      "name": "",
+      "email": "",
+      "organization": "",
+      "template_id": "",
+      "state": "queued"
+    }
   },
-  "approval_owners": ["community-ops"],
-  "created_at": "2026-08-05"
+  "approval_owners": [
+    "community-ops"
+  ],
+  "created_at": "2026-08-05",
+  "events": {
+    "selected": "boston-gp-lp-2026-09",
+    "catalog": [
+      {
+        "slug": "boston-gp-lp-2026-09",
+        "name": "Boston GP/LP Dinner",
+        "date": "2026-09-24",
+        "status": "confirmed",
+        "venue_capacity": 60,
+        "sponsorship_usd": 4500,
+        "audience_criteria": "Emerging managers and LPs active in the Northeast; roughly half returning attendees, half new.",
+        "sponsor_criteria": "Vendors and platforms that sell to early-stage investors and have sponsored comparable dinners.",
+        "prior_attendees_export": "",
+        "rsvp_export": "",
+        "sponsor_commitments": [],
+        "must_invite": [],
+        "do_not_invite": [],
+        "conflict_exclusions": []
+      }
+    ]
+  },
+  "pilot": {
+    "sample_size": 50,
+    "measure": [
+      "identity_resolution",
+      "field_coverage",
+      "conflicts",
+      "false_positives",
+      "accepted_updates",
+      "cost"
+    ],
+    "schedule_after_pass": true
+  },
+  "run_limits": {
+    "max_calls": 3000,
+    "max_runtime_minutes": 180,
+    "max_retries_per_item": 2,
+    "stop_on": [
+      "identity_drift",
+      "access_failure",
+      "conflict_spike",
+      "precision_below_pilot_bar",
+      "unexpected_cost"
+    ]
+  },
+  "review": {
+    "states": [
+      "approve",
+      "hold",
+      "reject"
+    ],
+    "per": [
+      "candidate",
+      "message"
+    ]
+  },
+  "application_version": "v1"
 }

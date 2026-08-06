@@ -53,6 +53,28 @@ member_confirmed > linkedin_profile > contextdev > web_public > platform_record 
 
 `platform_record` sits **near the bottom on purpose**. It is the baseline being refreshed — if it outranked fresh enrichment, every real update would be rejected as a conflict and the skill could never do its job. Building this fixture is what surfaced that: an earlier draft ranked `platform_record` second and produced four spurious `conflict_resolved` events instead of the two `role_change`/`org_change` pairs it should have. Only `member_confirmed` outranks a fresh observation, because a member correcting their own record beats any scraper.
 
+### Event gate cases
+
+Run lane two scoped to the shipped event brief:
+
+```bash
+node scripts/gate_prospects.mjs /tmp/net-ws --cycle 2026-08-05 --event harbor-dinner-2026-09
+```
+
+`1 eligible · 5 suppressed · 1 conflict`, and each outcome proves a different rule:
+
+| Prospect | Outcome |
+|---|---|
+| Amaka Obi | **eligible** — on `must_invite`, and nothing suppresses her |
+| Beacon Fund Services | `event:already_rsvpd` — matched the RSVP export by **organization**, not by person name. Sponsor rows are companies with no person on them, which is exactly the match the first version of this gate missed |
+| Ledgerline Legal | `event:conflict_exclusion` — domain on the event's conflict list |
+| Selin Osman | `member:already_in_community` |
+| Rival Community Co | `exclusion:profile_list` |
+| Casper Lindgren | `outreach:declined_35d_ago (cooldown 180d)` |
+| **Ingrid Solberg** | **`conflicts.jsonl`** — on `must_invite` *and* `do_not_invite`. Must-invite bypasses fit scoring; it never bypasses suppression. The gate surfaces the contradiction and lets the owner decide rather than picking a side |
+
+Without `--event`, the same fixture gives `4 eligible · 3 suppressed` — community-wide rules only. An unknown `--event` slug exits 1 rather than silently falling back to the community-wide gate.
+
 ### Gate cases
 
 | Prospect | Outcome |
