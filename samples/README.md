@@ -24,7 +24,7 @@ members: 9   events: 12
   conflict_resolved 1 · contact_change 3 · investing_status_change 2
   location_change 1 · new_member 1 · org_change 2 · role_change 2
 
-prospects: 7 read (1 malformed) → 3 eligible · 3 suppressed
+prospects: 8 read (1 malformed) → 4 eligible · 3 suppressed   (community-wide; add --event to scope it)
 writeback: 6 entries (dry run)
 ```
 
@@ -75,18 +75,18 @@ node scripts/gate_prospects.mjs /tmp/net-ws --cycle 2026-08-05 --event harbor-di
 
 Without `--event`, the same fixture gives `4 eligible · 3 suppressed` — community-wide rules only. An unknown `--event` slug exits 1 rather than silently falling back to the community-wide gate.
 
-### Gate cases
+### Community-wide gate, without `--event`
+
+The same fixture with no event scope gives `4 eligible · 3 suppressed` — only the rules that hold regardless of which event is being filled:
 
 | Prospect | Outcome |
 |---|---|
-| Beacon Fund Services | **eligible** — sponsor ICP evidence quoted |
-| Amaka Obi | **eligible** — investor, no prior contact |
-| Ledgerline Legal | **eligible** — sponsor |
-| Selin Osman | suppressed `member:already_in_community` — matched an existing member by LinkedIn URL |
-| Rival Community Co | suppressed `exclusion:profile_list` — domain on the profile's exclusion list |
-| Casper Lindgren | suppressed `outreach:declined_35d_ago (cooldown 180d)` — declined inside the cooldown |
+| Beacon Fund Services · Amaka Obi · Ledgerline Legal · Ingrid Solberg | **eligible** — no community-wide rule blocks them |
+| Selin Osman | `member:already_in_community` — matched an existing member by LinkedIn URL |
+| Rival Community Co | `exclusion:profile_list` — domain on the profile's exclusion list |
+| Casper Lindgren | `outreach:declined_35d_ago (cooldown 180d)` — declined inside the cooldown |
 
-Every suppression is written to `suppressed.jsonl` **with its reason**. A gate bug in either direction sends a real email, so its passes and its blocks get audited equally.
+The difference between this and the event run is the point: RSVP state, conflict exclusions, and must-invite rules only exist relative to a specific event. Every suppression is written to `suppressed.jsonl` **with its reason** — a gate bug in either direction sends a real email, so its passes and its blocks get audited equally.
 
 ## Idempotency
 
