@@ -34,21 +34,20 @@ SOURCE POLICY: {SOURCE_POLICY}
 MEMBERS (one JSON record per line — member_id, name, organization, linkedin_url, pass: full|light):
 {MEMBER_BATCH}
 
-RULES — CRITICAL:
+RULES:
 1. HARD CAP: 3 retrievals per full-pass member, 1 per light-pass member. Prepend
    `# call N/{TOTAL}` to every retrieval so the cap is visible in the log.
-2. One browser session for the whole batch if the source policy needs one; browser_end_session
-   before returning, always, including on failure.
-3. Human pace. Stop at the first interstitial — record the member as blocked, move on.
-   Never attempt a captcha. Never touch a login form; auth is live-view handoff, done upstream.
+2. One session for the whole batch when the source policy needs one, released before you
+   return, always, including on failure.
+3. Human pace. An interstitial ends that member's cycle: record them as blocked and move on.
+   Authentication is handled upstream by a person.
 4. Context.dev calls follow the operation contract in references/enrichment-sources.md —
    natural_language_job + endpoint + body + tags, recorded in the observation file.
 5. Every field value carries: value, source, source_url, observed_at, confidence
    (Verified | Estimated | Unknown), and an evidence quote for title/org/investing fields.
-6. NEVER invent an email. A found address is state "candidate". NEVER conclude
-   actively_investing=false from silence — silence past the window is "Unknown".
-7. NEVER infer anything from page design, follower counts, or profile completeness.
-   Quote the line that supports the field, or write Unknown.
+6. A found address is state "candidate" until a verifier promotes it. Silence past the
+   recency window makes actively_investing "Unknown"; only dated evidence makes it false.
+7. Quote the line that supports each field, or write Unknown.
 8. Write ALL observation files in a SINGLE bash call using chained heredocs.
 
 Report back ONLY: "Refreshed {n}/{total} ({f} full, {l} light), {b} blocked, session ended: yes".
@@ -73,13 +72,13 @@ ICP ({KIND}): {ICP_BLOCK}
 GEOGRAPHIES: {GEOS} · EVENT CONTEXT: {EVENT_FAMILIES}
 
 RULES:
-1. Search wide (web_search, Context.dev company resolution), retrieve narrow: HARD CAP
+1. Search wide, retrieve narrow: HARD CAP
    2 retrievals per candidate. Prepend `# call N` markers.
 2. Every candidate carries: kind, name, organization, domain, role (people), location,
    icp_evidence (a QUOTED line from a retrieved page), source_url, observed_at.
 3. No evidence quote, no candidate. A directory listing is a lead to verify, not evidence.
-4. The user's own community, its competitors, and its members are not candidates — but do
-   not filter for that; emit and let the gate suppress with a recorded reason.
+4. Emit every candidate you find. The gate suppresses members, competitors, and exclusions
+   mechanically after you, with a recorded reason.
 5. Batch all file writes into one bash call.
 
 Report back ONLY: "{KIND}: {n} candidates from {q} queries, calls {c}/{cap}".

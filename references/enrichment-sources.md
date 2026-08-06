@@ -8,10 +8,10 @@ The source ladder, the Context.dev operation contract, and the discipline per ru
 |---|---|---|---|
 | 1 | Platform record / export | Baseline, member_id join, outreach states | Free — it's the client's own data |
 | 2 | Context.dev | Company resolution by domain, person retrieve, structured extraction with `factCheck`, change monitors | Credits — 1/page, no failure multipliers |
-| 3 | `web_search` / `web_fetch` | Open discovery, dated public signals (fund announcements, press) | Cheap |
-| 4 | `browser_*` | Dynamic or authenticated surfaces only | Expensive — session + slot |
+| 3 | Open web search and fetch | Open discovery, dated public signals (fund announcements, press) | Cheap |
+| 4 | Browser session | Dynamic or authenticated surfaces only | Expensive — session + slot |
 
-Never use rung 4 for what rung 2 answers. A browser session that reads a static page is a concurrency slot spent on nothing.
+Rung 4 is for what rung 2 cannot answer. A browser session that reads a static page is a concurrency slot spent on nothing.
 
 ## Context.dev, natively through Opulent
 
@@ -46,7 +46,7 @@ Members supplied their LinkedIn URLs when they joined the community — that is 
 
 - Authenticated session belongs to the user: live-view handoff for login, session persists in the thread's browser context thereafter.
 - Human pace, sequential, one profile per member per cycle. The light pass skips even that for members with no open questions.
-- **Stop at the first interstitial.** A challenge page is a stop sign; report the member as `blocked` this cycle and move on. Never a captcha, ever.
+- **Stop at the first interstitial.** A challenge page is a stop sign: report the member as `blocked` this cycle and move on.
 - Prefer the export: if the community can pull a LinkedIn/CSV export or the member confirms details directly, both outrank a profile read on the precedence ladder anyway.
 - Store what the profile *says*, quoted — headline and about text verbatim, title/org as displayed. Paraphrase is where drift starts.
 

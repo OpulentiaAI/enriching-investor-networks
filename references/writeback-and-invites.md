@@ -52,7 +52,7 @@ proposed → eligible → approved → queued → invited → responded | declin
 ```
 
 - `proposed → eligible` is `gate_prospects.mjs` — mechanical suppression, no judgment.
-- `eligible → approved` is a human at the `ask_question` gate, with the list and evidence visible. Never auto-approved, never batched past the person.
+- `eligible → approved` is a human at the a blocking question gate, with the list and evidence visible. Never auto-approved, never batched past the person.
 - `approved → queued` writes `invite_queue.json` in the platform's shape (profile `invites.queue_shape`); the platform's own automation takes it from `queued`.
 - `invited → responded/declined/bounced` syncs back next cycle from the platform and feeds suppression memory.
 
