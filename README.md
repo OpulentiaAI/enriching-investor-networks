@@ -57,6 +57,7 @@ enriching-investor-networks/
 │   ├── enrichment-sources.md         the source ladder, Context.dev operation contract, email state machine
 │   ├── change-detection.md           identity resolution, diff semantics, the "still actively investing" rule
 │   ├── writeback-and-invites.md      push contract, invitation states, suppression rules, discovery packet
+│   ├── message-construction.md       the two message types, cut/add lists, evidence-honesty rules
 │   └── workflow.md                   subagent prompts, hard call caps, wave sizing
 ├── samples/                          one-cycle fixture — runs both lanes offline
 └── scripts/

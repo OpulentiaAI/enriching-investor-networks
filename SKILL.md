@@ -56,7 +56,7 @@ Reading is unattended; writing never is.
 
 ## Pipeline Overview
 
-Nine steps. Lane one (0–6) refreshes the known network. Lane two (7–8) builds the queues for one selected event. They run in the same cycle or independently.
+Ten steps. Lane one (0–6) refreshes the known network. Lane two (7–9) builds the queues for one selected event and drafts its outreach. They run in the same cycle or independently.
 
 0. **Setup** — workspace, cycle folder, previous-state check
 1. **Load community profile** — `profiles/{community_slug}.json`
@@ -66,7 +66,8 @@ Nine steps. Lane one (0–6) refreshes the known network. Lane two (7–8) build
 5. **Verify emails** — the required-and-current contract
 6. **Report + writeback payload** — `compile_refresh.mjs`, then the gate
 7. **Build event queues** — company gate first, then people at qualified companies
-8. **Gate, review, hand off** — suppression → approve/hold/reject → invitation queue
+8. **Draft the messages** — one action, evidence at the strength it was gathered
+9. **Gate, review, hand off** — suppression → approve/hold/reject → invitation queue
 
 Invoke with `/enriching-investor-networks [--community <slug>] [--event <slug>] [--cycle YYYY-MM-DD] [--lane refresh|events|both] [--push]`. Defaults: `both`, today's date, dry-run. Lane two needs `--event`; without one there is no audience, no capacity, and no reason to engage now. `--push` does not skip the gate; it only pre-selects the affirmative.
 
@@ -161,7 +162,19 @@ Output is two ranked queues per event — `sponsors.jsonl` and `attendees.jsonl`
 
 Detail in `references/event-queues.md`.
 
-## Step 8: Gate, review, hand off
+## Step 8: Draft the messages
+
+Every queued candidate needs a message before anyone can review one. Drafts only — the community's automation sends.
+
+Decide the job before writing: one action, what this reader already knows, and what happens if they do nothing. Prior attendees and cold contacts get different first lines, and the queue already knows which they are.
+
+Four moves, in order: the dated reason this arrived now, the event in one line, why this person specifically, the one action. Subject and preview are written last, as a pair, once the body exists.
+
+The claim in the message is the claim the queue gathered, at the same strength. Compressing evidence into a subject line is where it gets hardened — "announced a first close" is not "just raised their fund." Where a draft drops a caveat or shifts emphasis, say so in the review packet.
+
+Full guidance in `references/message-construction.md`.
+
+## Step 9: Gate, review, hand off
 
 ```bash
 node {SKILL_DIR}/scripts/gate_prospects.mjs "$WORKSPACE" --cycle "$CYCLE" --event "$EVENT_SLUG"
