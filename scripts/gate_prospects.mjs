@@ -112,6 +112,8 @@ function outreachBlock(keys) {
     const state = rec.state;
     if (state === "unsubscribed") return { reason: "outreach:unsubscribed", key };
     if (state === "bounced") return { reason: "outreach:bounced_contact", key };
+    // A reply ends the automated sequence. A human owns the thread from here.
+    if (state === "replied") return { reason: "outreach:replied_human_owns_thread", key };
     if (state === "declined") {
       const age = daysBetween(rec.at || "1970-01-01", CYCLE);
       if (age < COOLDOWN_DAYS) return { reason: `outreach:declined_${Math.round(age)}d_ago (cooldown ${COOLDOWN_DAYS}d)`, key };

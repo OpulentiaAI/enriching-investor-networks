@@ -80,5 +80,9 @@ What a new community engagement must answer before cycle one. Asked once, record
 6. Sponsor and investor **ICPs, exclusions, geographies, and approval owners** — who clicks approve, and for which batches.
 7. The invitation system's objects — queue shape, template ids, sequence states, and **unsubscribe/suppression behavior** the skill must honor.
 8. Cadence — where in the 2–4 week band, and any blackout dates around events.
+9. **Historical sponsor conversions and attendee outcomes** — what a good candidate looked like last time. Without them the first event's gate is a guess and cannot learn.
+10. **A reusable library of approved sponsor, investor, and attendee messages.** One real sponsor thread exists; there is no approved investor or attendee copy. Until there is, the review gate is carrying the whole quality bar.
+11. **Current sponsor-state file** — who is committed, at what tier, and who is mid-conversation.
+12. **Final event date, venue, and capacity**, confirmed rather than planned.
 
 Every unanswered item is a named `blocked` in the first cycle's report, not a guess. The packet exists so the skill's first real cycle writes into a contract, not into the dark.
