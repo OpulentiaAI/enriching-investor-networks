@@ -28,7 +28,7 @@ Borrowed whole from Opulent's GTM intelligence system, because it is the part th
 - Every field carries provenance: `source`, `source_url`, `observed_at`. A value with no provenance does not overwrite a value that has it.
 - **Never invent an email.** Email is the one field Ali-class clients mark *required and current* — which makes it the one field where a guess is sabotage. An email is `verified`, `accept_all`, `unknown`, or `bounced`; pattern-guessed addresses are recorded as `candidate`, clearly labeled, and never written back as current.
 - **"Still actively investing" is an evidence conclusion, not a vibe.** It requires a dated public signal inside the recency window (default 12 months): a disclosed investment, a fund announcement, board seat activity, or the member saying so. No signal in window → `Unknown`, not `false`. Leaving investing is `Verified` only with an explicit signal (operator role announcement, fund wind-down, the member's own statement).
-- Conflicts resolve by the profile's precedence ladder (default: `member_confirmed` > `platform_record` > `linkedin_profile` > `contextdev` > `inferred`), then by recency within the same rung. The loser is kept in `history`, not deleted.
+- Conflicts resolve by the profile's precedence ladder (default: `member_confirmed` > `linkedin_profile` > `contextdev` > `web_public` > `platform_record` > `inferred`), then by recency within the same rung. The loser is kept in `history`, not deleted. **`platform_record` sits near the bottom deliberately** — it is the baseline being refreshed, so ranking it above fresh enrichment would reject every real update as a conflict and the skill could never do its job. Only a member's own confirmation outranks a fresh observation.
 
 ## CRITICAL — Source discipline
 

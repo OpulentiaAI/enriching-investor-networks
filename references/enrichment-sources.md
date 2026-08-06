@@ -88,7 +88,9 @@ The `history` array is why conflicts are cheap: the ladder decides, nothing is l
 Default, overridable per profile:
 
 ```
-member_confirmed > platform_record > linkedin_profile > contextdev > web_public > inferred
+member_confirmed > linkedin_profile > contextdev > web_public > platform_record > inferred
 ```
+
+`platform_record` sits near the bottom deliberately: it is the baseline being refreshed. Rank it above fresh enrichment and every real update gets rejected as a conflict — the skill stops being able to do its job. Only `member_confirmed` outranks a fresh observation.
 
 Within a rung, recency wins. Across rungs, the ladder wins even against fresher data — a member's own confirmation from May beats a scraper's guess from today. `inferred` values (an `Estimated` title from a fund's strategy page, say) exist to be displayed with their label, never to overwrite anything above them.
