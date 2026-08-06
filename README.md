@@ -4,7 +4,7 @@ An Opulent skill for investor-community operations: keep the member database fre
 
 ## What it does
 
-A community database rots quietly. Investors change funds without telling anyone, emails go stale a character at a time, and "1,200 members" drifts into "1,200 rows, several hundred of them fiction." This skill treats freshness as a pipeline rather than a scrape. On each cycle it re-verifies every member record — email currency, title, organization, location, industries, profile text, and whether they are still actively investing — resolves each observation against the record it already holds, and writes a typed, dated change event for everything that moved: role changes, org moves, relocations, contact changes, investing-status transitions. Every field carries its source, its URL, the date it was seen, and a confidence label, so a value with weaker provenance can never quietly overwrite a stronger one; when two sources disagree the precedence ladder decides and the loser is kept in history rather than discarded. The output is a cycle report, a CSV, and a writeback payload shaped for the community platform's REST API — produced every cycle, pushed only when a person approves it, and verified by reading the record back afterward because a 200 is not proof the field took. The second lane finds new sponsors and investors against the community's ICPs, runs them through mechanical suppression — existing members, exclusions, prior declines, unsubscribes, anything that ever bounced — and hands the survivors to the invitation emails the platform already runs. It never sends anything itself. The one field clients mark *required and current* is email, which makes it the one field where a guess is sabotage: inferred addresses are labeled `candidate`, shown in the report, and withheld from writeback until verification promotes them.
+A community database rots quietly. Investors change funds without telling anyone, emails go stale a character at a time, and "1,200 members" drifts into "1,200 rows, several hundred of them fiction." This skill treats freshness as a pipeline rather than a scrape. On each cycle it re-verifies every member record — email currency, title, organization, location, industries, profile text, and whether they are still actively investing — resolves each observation against the record it already holds, and writes a typed, dated change event for everything that moved: role changes, org moves, relocations, contact changes, investing-status transitions. Every field carries its source, its URL, the date it was seen, and a confidence label, so a value with weaker provenance can never quietly overwrite a stronger one; when two sources disagree the precedence ladder decides and the loser is kept in history rather than discarded. The output is a cycle report, a CSV, and a writeback payload shaped for the community platform's REST API — produced every cycle, pushed only when a person approves it, and verified by reading the record back afterward because a 200 is not proof the field took. The second lane is scoped to one named event: it discovers candidate companies, gates them before enriching a single person, ranks the survivors into sponsor and attendee queues, drafts one message each, and runs everything through mechanical suppression — existing members, anyone already RSVP'd or invited, exclusions, prior declines, unsubscribes, anything that ever bounced — before a person approves, holds, or rejects each candidate and each message. It never sends anything itself. The one field clients mark *required and current* is email, which makes it the one field where a guess is sabotage: inferred addresses are labeled `candidate`, shown in the report, and withheld from writeback until verification promotes them.
 
 ## Required inputs
 
@@ -18,6 +18,9 @@ A community database rots quietly. Investors change funds without telling anyone
 | → `recency_months_actively_investing` | profile | **Yes** | Default 12. The window that decides when an investing signal goes stale. |
 | → `sponsor_icp` / `investor_icp` | profile | Lane two | With `evidence_bar` — what a candidate must be able to prove. |
 | → `exclusions`, `outreach` | profile | Lane two | Competitors and do-not-contact, plus decline cooldown and unsubscribe policy. |
+| → `events` block | profile | **Lane two** | The event brief: audience and sponsor criteria, capacity, status, prior attendees, RSVP export, sponsor commitments, must-invite, do-not-invite, conflict exclusions. Lane two needs `--event`. |
+| → `pilot`, `run_limits` | profile | **Yes** | Pilot size and measures; call/runtime/retry ceilings and stop conditions. Scheduling is earned, not assumed. |
+| RSVP + prior-attendee exports | `cycles/{date}/events/{slug}/` | Lane two | `rsvp.jsonl`, `invited.jsonl`. Without them the gate cannot tell who is already coming. |
 | `CONTEXT_DEV_API_KEY` | environment | For Context.dev | Server-side only. Opulent integrates Context natively; the skill never embeds or logs the key. |
 | Authenticated session | live-view handoff | If profile reads need login | A person signs in once; the thread's browser context carries it. The skill never types a credential and never attempts a captcha. |
 | Approval owner | profile + chat | For every write | One human at the writeback gate, one at each invitation batch. |
@@ -36,6 +39,7 @@ Persisted under `/opulent/workspace/networks/{community_slug}/` — durable acro
 | `cycles/{date}/` | That cycle's raw observations, events, quarantine, and prospect files. Re-parse freely; re-fetch never. |
 | `invite_queue.proposed.json` | Approved-pending prospects in the platform's queue shape. Becomes real only after the gate. |
 | `prospects/suppressed.jsonl` | Every suppressed prospect **with its reason** — the gate's blocks are audited as carefully as its passes. |
+| `prospects/conflicts.jsonl` | Must-invite names that are also suppressed. The gate surfaces the contradiction; the owner resolves it. |
 | `summary.json` + chat summary | Members, changes by type, email verification results, writeback size, prospect funnel, next cycle date. |
 
 A quiet cycle is a real result: zero events, zero writeback entries. Re-running a cycle produces zero of both and leaves the cycle record intact.
@@ -51,12 +55,13 @@ A quiet cycle is a real result: zero events, zero writeback entries. Re-running 
 
 ```
 enriching-investor-networks/
-├── SKILL.md                          the pipeline — 9 steps, evidence/source/gate discipline
+├── SKILL.md                          the pipeline — 10 steps, evidence/source/gate discipline
 ├── profiles/example.json             schema, cadence, ladder, ICPs, exclusions, API shape
 ├── references/
 │   ├── enrichment-sources.md         the source ladder, Context.dev operation contract, email state machine
 │   ├── change-detection.md           identity resolution, diff semantics, the "still actively investing" rule
 │   ├── writeback-and-invites.md      push contract, invitation states, suppression rules, discovery packet
+│   ├── event-queues.md               event brief, company gate, ranking, three-state review
 │   ├── message-construction.md       the two message types, cut/add lists, evidence-honesty rules
 │   └── workflow.md                   subagent prompts, hard call caps, wave sizing
 ├── samples/                          one-cycle fixture — runs both lanes offline
@@ -72,7 +77,7 @@ enriching-investor-networks/
 cp -R samples/fixture /tmp/net-ws && node scripts/diff_enrichment.mjs /tmp/net-ws --cycle 2026-08-05 && node scripts/gate_prospects.mjs /tmp/net-ws --cycle 2026-08-05 && node scripts/compile_refresh.mjs /tmp/net-ws --cycle 2026-08-05 --open
 ```
 
-Dependency-free, Node 18+. [`samples/README.md`](samples/README.md) explains what each of the 12 events and 6 gate outcomes proves — including why `platform_record` sits near the *bottom* of the precedence ladder, which the fixture is what caught.
+Dependency-free, Node 18+. [`samples/README.md`](samples/README.md) explains what each of the 12 change events and 7 gate outcomes proves — including why `platform_record` sits near the *bottom* of the precedence ladder, and why a must-invite name that is also do-not-invite goes to the owner rather than being resolved by the gate.
 
 ## Status
 
